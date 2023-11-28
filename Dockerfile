@@ -1,19 +1,20 @@
-# FROM postgres
+# Use an official PostgreSQL image as the base image
+FROM postgres:latest
 
-# RUN apk update
-# RUN apk add bash
+# Set environment variables for PostgreSQL
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=admin
+ENV POSTGRES_DB=database
 
-# CMD ["sh", "-c", "yarn dev"]
+# Install Node.js and Yarn
 
-FROM node:14-alpine 
+# Clean up
 
-WORKDIR /app
+# Expose the PostgreSQL port
+EXPOSE 5432
 
-RUN apk update
-RUN apk add bash
+# Copy any initialization scripts or additional configuration files
+# COPY init.sql /docker-entrypoint-initdb.d/
 
-ENV PORT=8080
-
-EXPOSE 8080
-
-CMD ["sh", "-c", "yarn dev"]
+# Entrypoint command to start PostgreSQL
+CMD ["postgres"]
