@@ -17,6 +17,14 @@ todosRoutes.post("/todos", async (request, response) => {
   //   allTodos.push({ name, status: false });
   return response.status(201).json(todo);
 });
+
+// POST SEM PRISMA
+// todosRoutes.post("/todos", async (request, response) => {
+//   const { name } = request.body;
+//   allTodos.push({ name, status: false });
+//   return response.status(201).json(allTodos);
+// });
+
 //R
 todosRoutes.get("/todos", (request, response) => {
   return response.status(200).json(allTodos);
