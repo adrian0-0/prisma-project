@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const allTodos = [{ nome: "aaa", status: false }];
 const todosRoutes = express.Router();
+todosRoutes.use(express.json());
 
 //C
 todosRoutes.post("/todos", async (request, response) => {
@@ -28,8 +29,9 @@ todosRoutes.post("/todos", async (request, response) => {
 //R
 
 // GET SIMPLES COM O PRISMA
-todosRoutes.get("/todos", (request, response) => {
-  return response.status(200).json(allTodos);
+todosRoutes.get("/todos", async (request, response) => {
+  const todos = await prisma.todo.findMany()
+  return response.status(200).json(todos);
 });
 
 //U
