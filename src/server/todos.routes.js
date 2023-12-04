@@ -2,7 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const allTodos = [{ nome: "aaa", status: false }];
+// const allTodos = [{ nome: "aaa", status: false }];
 const todosRoutes = express.Router();
 todosRoutes.use(express.json());
 
@@ -11,7 +11,7 @@ todosRoutes.post("/todos", async (request, response) => {
   const { name } = request.body;
   const todo = await prisma.todo.create({
     data: {
-      name,
+      name: name,
       status: false,
     },
   });
