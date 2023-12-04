@@ -11,7 +11,7 @@ todosRoutes.post("/todos", async (request, response) => {
   const { name } = request.body;
   const todo = await prisma.todo.create({
     data: {
-      name,
+      name: name,
       status: false,
     },
   });
