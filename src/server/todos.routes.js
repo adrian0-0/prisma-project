@@ -2,7 +2,7 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const allTodos = [{ nome: "aaa", status: false }];
+// const allTodos = [{ nome: "aaa", status: false }];
 const todosRoutes = express.Router();
 todosRoutes.use(express.json());
 
