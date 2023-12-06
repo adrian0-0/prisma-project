@@ -78,7 +78,10 @@ function App() {
               key={todo.name}
             >
               <Box w={"full"}>
-                <CustomCheckbox todos={todo} />
+                <CustomCheckbox
+                  todos={todo}
+                  // onClick={() => modifyStatusTodo(todo)}
+                />
               </Box>
               <ButtonGroup>
                 <Button
@@ -121,6 +124,7 @@ function App() {
     });
     getTodos();
     setInputVisibility(!inputVisibility);
+    setInputValue("");
   }
 
   async function deleteTodo(todo) {
@@ -144,8 +148,9 @@ function App() {
       name: inputValue,
     });
     setSelectTodo();
-    getTodos();
     setInputVisibility(false);
+    getTodos();
+    setInputValue("");
   }
 
   const getTodos = () => {
