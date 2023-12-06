@@ -11,103 +11,167 @@ import {
   Heading,
   Input,
   FormLabel,
+  Spacer,
 } from "@chakra-ui/react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useCheckbox } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 const arrayTodos = [
   { name: "Limpar a casa", status: false },
   { name: "Agendar reunião", status: false },
 ];
 
-const Todos = ({ todos }) => {
+const CustomCheckbox = ({ todos, ...props }) => {
+  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
+    useCheckbox(props);
+
   return (
-    <Box>
-      {todos.map((todos) => {
-        return (
-          <HStack mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}>
-            <Box w={"full"}>
-              {/* <Checkbox
-                size="md"
-                colorScheme="blue"
-                defaultIsChecked
-                borderStyle={"groove"}
-                css={`
-                  > span:first-of-type {
-                    box-shadow: unset;
-                  }
-                `}
-              >
-                {todos.name}
-              </Checkbox> */}
-              {/* <CustomCheckbox /> */}
-            </Box>
-            <ButtonGroup>
-              <Button colorScheme="teal">Editar</Button>
-              <Button colorScheme="red">Deletar</Button>
-            </ButtonGroup>
-          </HStack>
-        );
-      })}
-      <Text>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque porro,
-        voluptatibus voluptates temporibus deleniti laborum natus ratione quam,
-        quibusdam esse ab quae. Nemo optio harum molestiae voluptatum ducimus
-        qui suscipit.
+    <FormLabel
+      display="flex"
+      flexDirection="row"
+      alignItems="center"
+      gridColumnGap={2}
+      bg="blue.50"
+      mb={"0rem"}
+      border="1px solid"
+      borderColor="blue.500"
+      rounded="lg"
+      px={3}
+      py={1}
+      cursor="pointer"
+      {...htmlProps}
+    >
+      <Input {...getInputProps()} hidden />
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        border="2px solid"
+        borderColor="blue.500"
+        w={4}
+        h={4}
+        {...getCheckboxProps()}
+      >
+        {state.isChecked && <Box w={2} h={2} bg="blue.500" />}
+      </Flex>
+      <Text color="gray.700" {...getLabelProps()}>
+        {todos.name}
       </Text>
-    </Box>
+    </FormLabel>
   );
 };
 
 function App() {
-  const CustomCheckbox = (props) => {
-    const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
-      useCheckbox(props);
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [inputVisibility, setInputVisibility] = useState(false);
+  const [selectTodo, setSelectTodo] = useState();
 
+  const Todos = ({ todos }) => {
     return (
-      <FormLabel
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        gridColumnGap={2}
-        maxW="36"
-        bg="green.50"
-        border="1px solid"
-        borderColor="green.500"
-        rounded="lg"
-        px={3}
-        py={1}
-        cursor="pointer"
-        {...htmlProps}
-      >
-        <Input {...getInputProps()} hidden />
-        <Flex
-          alignItems="center"
-          justifyContent="center"
-          border="2px solid"
-          borderColor="green.500"
-          w={4}
-          h={4}
-          {...getCheckboxProps()}
-        >
-          {state.isChecked && <Box w={2} h={2} bg="green.500" />}
-        </Flex>
-        <Text color="gray.700" {...getLabelProps()}>
-          Click me
-        </Text>
-      </FormLabel>
+      <Box>
+        {todos.map((todo) => {
+          // Renomeie a variável para 'todo'
+          return (
+            <HStack
+              mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
+              key={todo.name}
+            >
+              <Box w={"full"}>
+                <CustomCheckbox todos={todo} />
+              </Box>
+              <ButtonGroup>
+                <Button
+                  colorScheme="teal"
+                  onClick={() => {
+                    handleWithEditButton(todo);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    deleteTodo(todo);
+                  }}
+                >
+                  Deletar
+                </Button>
+              </ButtonGroup>
+            </HStack>
+          );
+        })}
+      </Box>
     );
   };
 
+  async function handleButton() {
+    setInputVisibility(!inputVisibility);
+    console.log("handleButton");
+  }
+
+  async function handleWithEditButton(todo) {
+    setSelectTodo(todo);
+    selectTodo(true);
+  }
+
+  async function createTodo() {
+    const response = await axios.post("http://localhost:3333/todos", {
+      name: inputValue,
+    });
+    getTodos();
+    setInputVisibility(!inputVisibility);
+  }
+
+  async function deleteTodo(todo) {
+    const response = await axios.delete(
+      `http://localhost:3333/todos/${todo.id}`
+    );
+    getTodos();
+  }
+
+  async function modifyStatusTodo(todo) {
+    const response = await axios.put("http://localhost:3333/todos", {
+      id: todo.id,
+      status: !todo.status,
+    });
+    getTodos();
+  }
+
+  async function editTodo(todo) {
+    const response = await axios.put("http://localhost:3333/todos", {
+      id: selectTodo.id,
+      name: inputValue,
+    });
+    setSelectTodo();
+    getTodos();
+    setInputVisibility(false);
+  }
+
+  const getTodos = () => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3333/todos");
+        setTodos(response.data);
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+
+    fetchData();
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+
   return (
     <>
-      <Box mx={{ base: "1rem", md: "2rem", lg: "5rem" }}>
-        <CustomCheckbox />
-        <Flex
-          w={"100%"}
-          h="100svh"
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
+      <Box
+        mx={{ base: "1rem", md: "2rem", lg: "5rem" }}
+        my={{ base: "1rem", md: "2rem", lg: "5rem" }}
+      >
+        <Flex w={"100%"} justifyContent={"center"} alignItems={"center"}>
           <Card>
             <CardHeader mb={{ lg: "5rem", md: "3rem", base: "2rem" }}>
               <Heading textAlign={"center"} fontSize={"4xl"}>
@@ -115,13 +179,27 @@ function App() {
               </Heading>
             </CardHeader>
             <CardBody>
-              <Todos todos={arrayTodos} />
-              <Text>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque
-                porro, voluptatibus voluptates temporibus deleniti laborum natus
-                ratione quam, quibusdam esse ab quae. Nemo optio harum molestiae
-                voluptatum ducimus qui suscipit.
-              </Text>
+              <Todos todos={todos} />
+              <Input
+                value={inputValue}
+                display={inputVisibility ? "block" : "none"}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                }}
+              ></Input>
+              <Button
+                colorScheme="teal"
+                variant={"outline"}
+                onClick={() => {
+                  inputVisibility
+                    ? selectTodo
+                      ? editTodo()
+                      : createTodo()
+                    : handleButton();
+                }}
+              >
+                {inputVisibility ? "Enviar" : "Nova tarefa"}
+              </Button>
             </CardBody>
           </Card>
         </Flex>
