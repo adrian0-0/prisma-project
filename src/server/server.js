@@ -1,9 +1,11 @@
 import express from 'express';
 import todosRoutes from "./todos.routes.js"
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(todosRoutes);
 
 app.get("/health", (req, res) => { return res.json("up") })
