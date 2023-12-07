@@ -114,6 +114,7 @@ function App() {
   }
 
   async function handleWithEditButton(todo) {
+    handleButton();
     setSelectTodo(todo);
     selectTodo(true);
   }
@@ -176,14 +177,17 @@ function App() {
         mx={{ base: "1rem", md: "2rem", lg: "5rem" }}
         my={{ base: "1rem", md: "2rem", lg: "5rem" }}
       >
-        <Flex w={"100%"} justifyContent={"center"} alignItems={"center"}>
-          <Card>
-            <CardHeader mb={{ lg: "5rem", md: "3rem", base: "2rem" }}>
-              <Heading textAlign={"center"} fontSize={"4xl"}>
+        <Flex justifyContent={"center"} alignItems={"center"}>
+          <Card w={{ base: "100%", md: "500px", lg: "700px" }} py={"2rem"}>
+            <CardHeader
+              mb={{ lg: "5rem", md: "3rem", base: "2rem" }}
+              py={"0px"}
+            >
+              <Heading textAlign={"center"} fontSize={"4xl"} p>
                 CRUD PRISMA
               </Heading>
             </CardHeader>
-            <CardBody>
+            <CardBody py={"0px"}>
               <Todos todos={todos} />
               <Input
                 value={inputValue}
@@ -193,6 +197,8 @@ function App() {
                 }}
               ></Input>
               <Button
+                width={"100%"}
+                mt={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
                 colorScheme="teal"
                 variant={"outline"}
                 onClick={() => {
