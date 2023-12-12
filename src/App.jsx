@@ -12,6 +12,7 @@ import {
   Input,
   FormLabel,
   Spacer,
+  Divider,
 } from "@chakra-ui/react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useCheckbox } from "@chakra-ui/react";
@@ -23,9 +24,45 @@ const arrayTodos = [
 ];
 
 const CustomCheckbox = ({ todos, ...props }) => {
+  const [checkBox, setCheckBox] = useState(todos.status);
   const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
     useCheckbox(props);
+  const [atodos, setTodos] = useState([]);
 
+  async function modifyStatusTodo(todo) {
+    const response = await axios.put("http://localhost:3333/todos", {
+      id: todo.id,
+      status: !todo.status,
+    });
+    // Atualiza os todos após a modificação
+
+    const updatedTodo = response.data;
+    console.log(updatedTodo);
+
+    getTodos();
+  }
+
+  const getTodos = () => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3333/todos");
+        setTodos(response.data);
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+
+    fetchData();
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
+
+  useEffect(() => {
+    // Atualiza o estado do checkbox quando o valor de 'todos.status' muda
+    setCheckBox(todos.status);
+  }, [todos.status]);
   return (
     <FormLabel
       display="flex"
@@ -42,7 +79,14 @@ const CustomCheckbox = ({ todos, ...props }) => {
       cursor="pointer"
       {...htmlProps}
     >
-      <Input {...getInputProps()} hidden />
+      <Input
+        {...getInputProps()}
+        hidden
+        checked={checkBox}
+        onClick={() => {
+          modifyStatusTodo(todos);
+        }}
+      />
       <Flex
         alignItems="center"
         justifyContent="center"
@@ -68,9 +112,53 @@ function App() {
   const [selectTodo, setSelectTodo] = useState();
 
   const Todos = ({ todos }) => {
+    const tarefasParaFazer = todos.filter((todo) => todo.status === false);
+    const tarefasConcluidas = todos.filter((todo) => todo.status === true);
+
     return (
       <Box>
-        {todos.map((todo) => {
+        {tarefasParaFazer.map((todo) => {
+          // Renomeie a variável para 'todo'
+          return (
+            <HStack
+              mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
+              key={todo.name}
+            >
+              <Box w={"full"}>
+                <CustomCheckbox
+                  todos={todo}
+                  // onClick={() => modifyStatusTodo(todo)}
+                />
+              </Box>
+              <ButtonGroup>
+                <Button
+                  colorScheme="teal"
+                  onClick={() => {
+                    handleWithEditButton(todo);
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    deleteTodo(todo);
+                  }}
+                >
+                  Deletar
+                </Button>
+              </ButtonGroup>
+            </HStack>
+          );
+        })}
+        <Divider></Divider>
+        <Heading
+          textAlign={"center"}
+          my={{ base: "2rem", md: "3rem", lg: "5rem" }}
+        >
+          Tarefas Concluidas
+        </Heading>
+        {tarefasConcluidas.map((todo) => {
           // Renomeie a variável para 'todo'
           return (
             <HStack
@@ -128,18 +216,16 @@ function App() {
     setInputValue("");
   }
 
+  async function createDoneTask() {
+    const response = await axios.post("http://localhost:3333/done-task", {
+      id: 1,
+    });
+  }
+
   async function deleteTodo(todo) {
     const response = await axios.delete(
       `http://localhost:3333/todos/${todo.id}`
     );
-    getTodos();
-  }
-
-  async function modifyStatusTodo(todo) {
-    const response = await axios.put("http://localhost:3333/todos", {
-      id: todo.id,
-      status: !todo.status,
-    });
     getTodos();
   }
 
@@ -183,7 +269,7 @@ function App() {
               mb={{ lg: "5rem", md: "3rem", base: "2rem" }}
               py={"0px"}
             >
-              <Heading textAlign={"center"} fontSize={"4xl"} p>
+              <Heading textAlign={"center"} fontSize={"4xl"}>
                 CRUD PRISMA
               </Heading>
             </CardHeader>
