@@ -10,14 +10,24 @@ import {
   HStack,
   Heading,
   Input,
+  Link,
   FormLabel,
   Spacer,
   Divider,
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalCloseButton,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useCheckbox } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import Todos from "./components/Todos";
 const arrayTodos = [
   { name: "Limpar a casa", status: false },
   { name: "Agendar reunião", status: false },
@@ -41,6 +51,7 @@ const CustomCheckbox = ({ todos, ...props }) => {
       rounded="lg"
       px={3}
       py={1}
+      m={"0rem"}
       cursor="pointer"
       {...htmlProps}
     >
@@ -68,6 +79,83 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [inputVisibility, setInputVisibility] = useState(false);
   const [selectTodo, setSelectTodo] = useState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // const Modal = () => {
+  //   return (
+  //     <Box>
+  //       <Link mr={{ base: "1rem", md: "1rem", lg: "2rem" }} onClick={onOpen}>
+  //         +
+  //       </Link>
+  //       <Modal isOpen={isOpen} onClose={onClose} size={"2xl"}>
+  //         <ModalOverlay />
+  //         <ModalContent>
+  //           <ModalHeader>Como criar arquivos ZIP?</ModalHeader>
+  //           <ModalCloseButton />
+  //           <ModalBody>
+  //             <Box mb={"2rem"}>
+  //               <Text
+  //                 fontSize={"lg"}
+  //                 color={"#2D3748"}
+  //                 fontWeight={"500"}
+  //                 mb={"1rem"}
+  //               >
+  //                 Passo 1
+  //               </Text>
+  //               <HStack>
+  //                 <Image
+  //                   src="/assets/icons/MdOutlineArrowRight.svg"
+  //                   alt="Icone de flecha"
+  //                   width={"30px"}
+  //                 ></Image>
+  //                 <Text>
+  //                   Organize todos os seus documentos. Você precisará criar uma
+  //                   pasta com todos os arquivos que deverão ser enviados.
+  //                 </Text>
+  //               </HStack>
+  //             </Box>
+  //             <Box mb={"1rem"}>
+  //               <Text
+  //                 fontSize={"lg"}
+  //                 color={"#2D3748"}
+  //                 fontWeight={"500"}
+  //                 mb={"1rem"}
+  //               >
+  //                 Passo 2
+  //               </Text>
+  //               <HStack>
+  //                 <Image
+  //                   src="/assets/icons/MdOutlineArrowRight.svg"
+  //                   alt="Icone de flecha"
+  //                   width={"30px"}
+  //                 ></Image>
+  //                 <Text>
+  //                   Clique na pasta com o botão direito, localize a opção
+  //                   “Compactar para arquivo ZIP” e assim o seu arquivo será
+  //                   compactado
+  //                 </Text>
+  //               </HStack>
+  //             </Box>
+  //             <Flex justifyContent={"center"}>
+  //               <Image
+  //                 src="/assets/images/zip_instructions.png"
+  //                 alt="Instruções para compactar um arquivo para o formato zip"
+  //                 borderRadius={"2%"}
+  //               />
+  //             </Flex>
+  //           </ModalBody>
+  //           <ModalFooter>
+  //             <HStack w={"full"} justifyContent={"flex-end"}>
+  //               <Button colorScheme="blue" mr={3} onClick={onClose}>
+  //                 Fechar
+  //               </Button>
+  //             </HStack>
+  //           </ModalFooter>
+  //         </ModalContent>
+  //       </Modal>
+  //     </Box>
+  //   );
+  // };
 
   const Todos = ({ todos }) => {
     const tarefasParaFazer = todos.filter((todo) => todo.status === false);
@@ -75,14 +163,30 @@ function App() {
 
     return (
       <Box>
+        {/* <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody></ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant="ghost">Secondary Action</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal> */}
         {tarefasParaFazer.map((todo) => {
           // Renomeie a variável para 'todo'
           return (
             <HStack
               mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
               key={todo.id}
+              spacing={"0rem"}
             >
-              <Box w={"full"}>
+              <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+                <Button onClick={onOpen}>Open Modal</Button>
                 <CustomCheckbox
                   todos={todo}
                   onClick={() => modifyStatusTodo(todo)}
