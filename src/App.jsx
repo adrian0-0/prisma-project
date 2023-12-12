@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useCheckbox } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 const arrayTodos = [
   { name: "Limpar a casa", status: false },
@@ -27,42 +27,7 @@ const CustomCheckbox = ({ todos, ...props }) => {
   const [checkBox, setCheckBox] = useState(todos.status);
   const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
     useCheckbox(props);
-  const [atodos, setTodos] = useState([]);
 
-  async function modifyStatusTodo(todo) {
-    const response = await axios.put("http://localhost:3333/todos", {
-      id: todo.id,
-      status: !todo.status,
-    });
-    // Atualiza os todos após a modificação
-
-    const updatedTodo = response.data;
-    console.log(updatedTodo);
-
-    getTodos();
-  }
-
-  const getTodos = () => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3333/todos");
-        setTodos(response.data);
-      } catch (error) {
-        console.error("Error fetching todos:", error);
-      }
-    };
-
-    fetchData();
-  };
-
-  useEffect(() => {
-    getTodos();
-  }, []);
-
-  useEffect(() => {
-    // Atualiza o estado do checkbox quando o valor de 'todos.status' muda
-    setCheckBox(todos.status);
-  }, [todos.status]);
   return (
     <FormLabel
       display="flex"
@@ -79,14 +44,7 @@ const CustomCheckbox = ({ todos, ...props }) => {
       cursor="pointer"
       {...htmlProps}
     >
-      <Input
-        {...getInputProps()}
-        hidden
-        checked={checkBox}
-        onClick={() => {
-          modifyStatusTodo(todos);
-        }}
-      />
+      <Input {...getInputProps()} hidden checked={checkBox} />
       <Flex
         alignItems="center"
         justifyContent="center"
@@ -122,12 +80,12 @@ function App() {
           return (
             <HStack
               mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
-              key={todo.name}
+              key={todo.id}
             >
               <Box w={"full"}>
                 <CustomCheckbox
                   todos={todo}
-                  // onClick={() => modifyStatusTodo(todo)}
+                  onClick={() => modifyStatusTodo(todo)}
                 />
               </Box>
               <ButtonGroup>
@@ -168,7 +126,7 @@ function App() {
               <Box w={"full"}>
                 <CustomCheckbox
                   todos={todo}
-                  // onClick={() => modifyStatusTodo(todo)}
+                  onClick={() => modifyStatusTodo(todo)}
                 />
               </Box>
               <ButtonGroup>
@@ -216,12 +174,6 @@ function App() {
     setInputValue("");
   }
 
-  async function createDoneTask() {
-    const response = await axios.post("http://localhost:3333/done-task", {
-      id: 1,
-    });
-  }
-
   async function deleteTodo(todo) {
     const response = await axios.delete(
       `http://localhost:3333/todos/${todo.id}`
@@ -238,6 +190,20 @@ function App() {
     setInputVisibility(false);
     getTodos();
     setInputValue("");
+  }
+
+  async function modifyStatusTodo(todo) {
+    try {
+      const response = await axios.put(`http://localhost:3333/todos`, {
+        id: todo.id,
+        status: todo.status === true ? false : true,
+      });
+
+      const updatedTodo = response.data;
+      getTodos();
+    } catch (err) {
+      console.log("Erro no estado do Status", err);
+    }
   }
 
   const getTodos = () => {
