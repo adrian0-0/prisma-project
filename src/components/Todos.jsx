@@ -99,8 +99,10 @@ function Todos() {
             key={todo.id}
             spacing={"0rem"}
           >
-            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+            <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <TaskModal todos={todo} />
+            </Box>
+            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}

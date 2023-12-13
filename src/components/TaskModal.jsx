@@ -18,6 +18,7 @@ function TaskModal({ todos }) {
 
   return (
     <Box>
+      <Button onClick={onOpen}>+</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -28,7 +29,7 @@ function TaskModal({ todos }) {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button variant="ghost"></Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
