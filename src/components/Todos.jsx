@@ -6,22 +6,7 @@ function Todos({ todos }) {
 
   return (
     <Box>
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody></ModalBody>
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
-                Close
-              </Button>
-              <Button variant="ghost">Secondary Action</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal> */}
       {tarefasParaFazer.map((todo) => {
-        // Renomeie a variável para 'todo'
         return (
           <HStack
             mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
@@ -29,7 +14,6 @@ function Todos({ todos }) {
             spacing={"0rem"}
           >
             <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
-              <Button onClick={onOpen}>Open Modal</Button>
               <CustomCheckbox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}

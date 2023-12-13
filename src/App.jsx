@@ -28,6 +28,7 @@ import { useCheckbox } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import Todos from "./components/Todos";
+import TaskDescription from "./components/TaskDescription";
 const arrayTodos = [
   { name: "Limpar a casa", status: false },
   { name: "Agendar reunião", status: false },
@@ -163,20 +164,6 @@ function App() {
 
     return (
       <Box>
-        {/* <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody></ModalBody>
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
-                Close
-              </Button>
-              <Button variant="ghost">Secondary Action</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal> */}
         {tarefasParaFazer.map((todo) => {
           // Renomeie a variável para 'todo'
           return (
@@ -186,7 +173,7 @@ function App() {
               spacing={"0rem"}
             >
               <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
-                <Button onClick={onOpen}>Open Modal</Button>
+                <TaskDescription todos={todo} />
                 <CustomCheckbox
                   todos={todo}
                   onClick={() => modifyStatusTodo(todo)}
