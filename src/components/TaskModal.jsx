@@ -10,14 +10,14 @@ import {
   useDisclosure,
   Button,
   Box,
+  HStack,
 } from "@chakra-ui/react";
 
-function TaskDescription({ todos }) {
+function TaskModal({ todos }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Box>
-      <Button onClick={onOpen}>Open Modal</Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -36,4 +36,4 @@ function TaskDescription({ todos }) {
   );
 }
 
-export default TaskDescription;
+export default TaskModal;

@@ -1,76 +1,18 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  Flex,
-  Card,
-  CardBody,
-  Text,
-  CardHeader,
   Button,
   ButtonGroup,
   HStack,
   Heading,
   Input,
-  Link,
-  FormLabel,
-  Spacer,
   Divider,
-  Modal,
-  ModalOverlay,
-  ModalHeader,
-  ModalCloseButton,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useCheckbox } from "@chakra-ui/react";
-import TaskDescription from "./TaskDescription";
+import TaskModal from "./TaskModal";
 import CustomCheckBox from "./CustomCheckBox";
 
-const CustomCheckbox = ({ todos, ...props }) => {
-  const [checkBox, setCheckBox] = useState(todos.status);
-  const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
-    useCheckbox(props);
-
-  return (
-    <FormLabel
-      display="flex"
-      flexDirection="row"
-      alignItems="center"
-      gridColumnGap={2}
-      bg="blue.50"
-      mb={"0rem"}
-      border="1px solid"
-      borderColor="blue.500"
-      rounded="lg"
-      px={3}
-      py={1}
-      m={"0rem"}
-      cursor="pointer"
-      {...htmlProps}
-    >
-      <Input {...getInputProps()} hidden checked={checkBox} />
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        border="2px solid"
-        borderColor="blue.500"
-        w={4}
-        h={4}
-        {...getCheckboxProps()}
-      >
-        {state.isChecked && <Box w={2} h={2} bg="blue.500" />}
-      </Flex>
-      <Text color="gray.700" {...getLabelProps()}>
-        {todos.name}
-      </Text>
-    </FormLabel>
-  );
-};
-
-function Todos({ atodos }) {
+function Todos() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [inputVisibility, setInputVisibility] = useState(false);
@@ -156,8 +98,8 @@ function Todos({ atodos }) {
             spacing={"0rem"}
           >
             <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
-              <TaskDescription todos={todo} />
-              <CustomCheckbox
+              <TaskModal todos={todo} />
+              <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}
               />
@@ -198,7 +140,7 @@ function Todos({ atodos }) {
             key={todo.name}
           >
             <Box w={"full"}>
-              <CustomCheckbox
+              <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}
               />
