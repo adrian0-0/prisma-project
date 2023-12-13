@@ -27,6 +27,7 @@ import {
 import axios from "axios";
 import { useCheckbox } from "@chakra-ui/react";
 import TaskDescription from "./TaskDescription";
+import CustomCheckBox from "./CustomCheckBox";
 
 const CustomCheckbox = ({ todos, ...props }) => {
   const [checkBox, setCheckBox] = useState(todos.status);
