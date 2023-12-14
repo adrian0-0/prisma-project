@@ -9,6 +9,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
+import api from "./Api";
 import TaskModal from "./TaskModal";
 import CustomCheckBox from "./CustomCheckBox";
 
@@ -143,7 +144,7 @@ function Todos() {
             return (
               <HStack
                 mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
-                key={todo.name}
+                key={todo.id}
               >
                 <Box w={"full"}>
                   <CustomCheckBox
