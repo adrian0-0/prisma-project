@@ -19,9 +19,10 @@ function Todos() {
   const [selectTodo, setSelectTodo] = useState();
   const tarefasParaFazer = todos.filter((todo) => todo.status === false);
   const tarefasConcluidas = todos.filter((todo) => todo.status === true);
+  const [todosLength, setTodosLength] = useState();
+  console.log(tarefasConcluidas.length);
   async function handleButton() {
     setInputVisibility(!inputVisibility);
-    console.log("handleButton");
   }
 
   async function handleWithEditButton(todo) {
@@ -90,6 +91,7 @@ function Todos() {
 
   return (
     <Box>
+      {/* {console.log(tarefasParaFazer)} */}
       {tarefasParaFazer.map((todo) => {
         return (
           <HStack
@@ -97,8 +99,10 @@ function Todos() {
             key={todo.id}
             spacing={"0rem"}
           >
-            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+            <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <TaskModal todos={todo} />
+            </Box>
+            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}
@@ -125,47 +129,52 @@ function Todos() {
           </HStack>
         );
       })}
-      <Divider></Divider>
-      <Heading
-        textAlign={"center"}
-        my={{ base: "2rem", md: "3rem", lg: "5rem" }}
-      >
-        Tarefas Concluidas
-      </Heading>
-      {tarefasConcluidas.map((todo) => {
-        // Renomeie a variável para 'todo'
-        return (
-          <HStack
-            mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
-            key={todo.name}
+      {tarefasConcluidas.length > 0 && (
+        <>
+          <Divider></Divider>
+          <Heading
+            textAlign={"center"}
+            my={{ base: "2rem", md: "3rem", lg: "5rem" }}
           >
-            <Box w={"full"}>
-              <CustomCheckBox
-                todos={todo}
-                onClick={() => modifyStatusTodo(todo)}
-              />
-            </Box>
-            <ButtonGroup>
-              <Button
-                colorScheme="teal"
-                onClick={() => {
-                  handleWithEditButton(todo);
-                }}
+            Tarefas Concluidas
+          </Heading>
+          {tarefasConcluidas.map((todo) => {
+            // Renomeie a variável para 'todo'
+            return (
+              <HStack
+                mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
+                key={todo.name}
               >
-                Editar
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  deleteTodo(todo);
-                }}
-              >
-                Deletar
-              </Button>
-            </ButtonGroup>
-          </HStack>
-        );
-      })}
+                <Box w={"full"}>
+                  <CustomCheckBox
+                    todos={todo}
+                    onClick={() => modifyStatusTodo(todo)}
+                  />
+                </Box>
+                <ButtonGroup>
+                  <Button
+                    colorScheme="teal"
+                    onClick={() => {
+                      handleWithEditButton(todo);
+                    }}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => {
+                      deleteTodo(todo);
+                    }}
+                  >
+                    Deletar
+                  </Button>
+                </ButtonGroup>
+              </HStack>
+            );
+          })}{" "}
+        </>
+      )}
+
       <Input
         value={inputValue}
         display={inputVisibility ? "block" : "none"}
