@@ -21,7 +21,6 @@ function Todos() {
   const tarefasParaFazer = todos.filter((todo) => todo.status === false);
   const tarefasConcluidas = todos.filter((todo) => todo.status === true);
   const [todosLength, setTodosLength] = useState();
-  console.log(tarefasConcluidas.length);
   async function handleButton() {
     setInputVisibility(!inputVisibility);
   }
@@ -29,7 +28,6 @@ function Todos() {
   async function handleWithEditButton(todo) {
     handleButton();
     setSelectTodo(todo);
-    selectTodo(true);
   }
 
   async function createTodo() {
@@ -53,10 +51,9 @@ function Todos() {
       id: selectTodo.id,
       name: inputValue,
     });
-    setSelectTodo();
     setInputVisibility(false);
-    getTodos();
     setInputValue("");
+    getTodos();
   }
 
   async function modifyStatusTodo(todo) {

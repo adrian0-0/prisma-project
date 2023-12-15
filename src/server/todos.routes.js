@@ -56,7 +56,7 @@ todosRoutes.put("/todos", async (request, response) => {
     data: {
       name,
       status,
-      description
+      description,
     },
   });
   return response.status(200).json(todo);

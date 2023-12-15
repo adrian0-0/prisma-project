@@ -19,5 +19,5 @@ model Todo {
   id Int @id @default(sequence())
   status Boolean @default(false)
   name String
-  description String?
+  description String @default("")
 }

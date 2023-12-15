@@ -16,29 +16,14 @@ import api from "./Api";
 
 function TaskModal({ todos }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [descriptionValue, setDescriptionValue] = useState("");
   const [inputVisibilty, setInputVisibility] = useState(true);
 
-  const getTodos = () => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/");
-        setTodos(response.data);
-      } catch (error) {
-        console.error("Error fetching todos:", error);
-      }
-    };
-
-    fetchData();
-  };
-
-  useEffect(() => {
-    getTodos();
-  }, []);
-
   async function editarModalDesc(todos) {
-    const response = await api.put(`/`, {
+    console.log(descriptionValue);
+    console.log(todos.id);
+    console.log(todos.description);
+    const response = await api.put("", {
       id: todos.id,
       description: descriptionValue,
     });
@@ -57,7 +42,9 @@ function TaskModal({ todos }) {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            {todos.name}
             {todos.description}
+
             <Input
               value={descriptionValue}
               display={inputVisibilty ? "block" : "none"}
@@ -68,7 +55,7 @@ function TaskModal({ todos }) {
             <Button
               colorScheme="teal"
               onClick={() => {
-                inputVisibilty ? handleButton() : editarModalDesc(todos);
+                inputVisibilty ? editarModalDesc(todos) : handleButton();
               }}
             >
               Editar
