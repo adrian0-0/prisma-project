@@ -9,6 +9,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
+import api from "./Api";
 import TaskModal from "./TaskModal";
 import CustomCheckBox from "./CustomCheckBox";
 
@@ -20,7 +21,6 @@ function Todos() {
   const tarefasParaFazer = todos.filter((todo) => todo.status === false);
   const tarefasConcluidas = todos.filter((todo) => todo.status === true);
   const [todosLength, setTodosLength] = useState();
-  console.log(tarefasConcluidas.length);
   async function handleButton() {
     setInputVisibility(!inputVisibility);
   }
@@ -28,7 +28,6 @@ function Todos() {
   async function handleWithEditButton(todo) {
     handleButton();
     setSelectTodo(todo);
-    selectTodo(true);
   }
 
   async function createTodo() {
@@ -52,10 +51,9 @@ function Todos() {
       id: selectTodo.id,
       name: inputValue,
     });
-    setSelectTodo();
     setInputVisibility(false);
-    getTodos();
     setInputValue("");
+    getTodos();
   }
 
   async function modifyStatusTodo(todo) {
@@ -143,8 +141,11 @@ function Todos() {
             return (
               <HStack
                 mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
-                key={todo.name}
+                key={todo.id}
               >
+                <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+                  <TaskModal todos={todo} />
+                </Box>
                 <Box w={"full"}>
                   <CustomCheckBox
                     todos={todo}

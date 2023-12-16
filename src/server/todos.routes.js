@@ -13,6 +13,7 @@ todosRoutes.post("/todos", async (request, response) => {
     data: {
       name: name,
       status: false,
+      description: "",
     },
   });
   //   allTodos.push({ name, status: false });
@@ -36,7 +37,7 @@ todosRoutes.get("/todos", async (request, response) => {
 
 //U
 todosRoutes.put("/todos", async (request, response) => {
-  const { name, status, id } = request.body;
+  const { name, status, id, description } = request.body;
 
   //SE ID NÃO EXISTIR RETORNE
   if (!id) {
@@ -56,6 +57,7 @@ todosRoutes.put("/todos", async (request, response) => {
     data: {
       name,
       status,
+      description,
     },
   });
   return response.status(200).json(todo);
@@ -77,7 +79,7 @@ todosRoutes.delete("/todos/:id", async (request, response) => {
   });
   //SE O MODEL TODO NÃO EXISTIR RETORNE
   if (!todoAlreadyExist) {
-    return response.status(404).json("[Todo] não existe");
+    return response.status(404).json("Tabela [Todo] não existe");
   }
 
   const todo = await prisma.todo.delete({

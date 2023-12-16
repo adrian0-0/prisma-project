@@ -12,8 +12,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+// Coloque id Int @id @default(autoincrement()) quando o provider for postgres
+// Coloque id Int @id @default(sequence()) quando o provider for cockroachdb
 model Todo {
   id Int @id @default(sequence())
   status Boolean @default(false)
-  name String
+  name String @default("")
+  description String @default("")
 }
