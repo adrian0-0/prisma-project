@@ -143,6 +143,9 @@ function Todos() {
                 mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
                 key={todo.id}
               >
+                <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+                  <TaskModal todos={todo} />
+                </Box>
                 <Box w={"full"}>
                   <CustomCheckBox
                     todos={todo}

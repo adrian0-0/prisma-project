@@ -18,6 +18,6 @@ datasource db {
 model Todo {
   id Int @id @default(sequence())
   status Boolean @default(false)
-  name String
+  name String @default("")
   description String @default("")
 }

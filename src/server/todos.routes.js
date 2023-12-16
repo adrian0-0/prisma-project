@@ -13,6 +13,7 @@ todosRoutes.post("/todos", async (request, response) => {
     data: {
       name: name,
       status: false,
+      description: "",
     },
   });
   //   allTodos.push({ name, status: false });
