@@ -8,6 +8,7 @@ import {
   FormLabel,
   useCheckbox,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 
 function CustomCheckBox({ todos, ...props }) {
   const [checkBox, setCheckBox] = useState(todos.status);
@@ -16,6 +17,10 @@ function CustomCheckBox({ todos, ...props }) {
 
   return (
     <FormLabel
+      as={motion.div}
+      whileHover={{ scale: 1.02 }}
+      onHoverStart={(e) => {}}
+      onHoverEnd={(e) => {}}
       display="flex"
       flexDirection="row"
       alignItems="center"
