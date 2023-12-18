@@ -14,6 +14,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import api from "./Api";
 
 function TaskModal({ todos }) {
@@ -32,17 +33,46 @@ function TaskModal({ todos }) {
       description: descriptionValue,
     });
     setInputVisibility(false);
-    // setTextVisibility(false);
     setEnviarBtnVisibility(false);
   }
 
-  // async function handleButton() {
-  //   setInputVisibility(true);
-  // }
+  const Motion = () => {
+    return (
+      <Box
+        as={motion.div}
+        height="40px"
+        width="40px"
+        borderRadius={"5px"}
+        bg="gray.100"
+        onClick={onOpen}
+        whileHover={{ scale: 1.05, rotate: 45 }}
+        whileTap={{
+          scale: 0.8,
+          rotate: -45,
+          borderRadius: "100%",
+        }}
+
+        // not work: transition={{ transition: "0.5", ease: "linear" }}
+      >
+        <Text
+          display={"flex"}
+          h={"full"}
+          w={"full"}
+          alignSelf={"center"}
+          alignContent={"center"}
+          justifyContent={"center"}
+          justifyItems={"center"}
+          alignItems={"center"}
+        >
+          +
+        </Text>
+      </Box>
+    );
+  };
 
   return (
     <Box>
-      <Button onClick={onOpen}>+</Button>
+      <Motion />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
