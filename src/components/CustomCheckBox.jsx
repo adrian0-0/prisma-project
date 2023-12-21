@@ -21,6 +21,10 @@ function CustomCheckBox({ todos, ...props }) {
       whileHover={{ scale: 1.02 }}
       onHoverStart={(e) => {}}
       onHoverEnd={(e) => {}}
+      initial={{ opacity: 0, x: 100 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition="0.5s ease-out"
+      viewport={{ once: true }}
       display="flex"
       flexDirection="row"
       alignItems="center"
