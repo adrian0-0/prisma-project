@@ -52,7 +52,15 @@ function CustomCheckBox({ todos, ...props }) {
       >
         {state.isChecked && <Box w={2} h={2} bg="blue.500" />}
       </Flex>
-      <Text color="gray.700" {...getLabelProps()}>
+      <Text
+        color="gray.700"
+        {...getLabelProps()}
+        display="inline-block"
+        whiteSpace="nowrap"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        maxWidth="100%"
+      >
         {todos.name}
       </Text>
     </FormLabel>

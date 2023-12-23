@@ -13,6 +13,7 @@ import {
   Box,
   Input,
   Text,
+  Heading,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import api from "./Api";
@@ -79,8 +80,13 @@ function TaskModal({ todos }) {
           <ModalHeader>{todos.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text mb={"2rem"}>
-              Nome da descrição:{" "}
+            <Text
+              fontSize={"lg"}
+              mb={{ base: "1rem", md: "`1rem", lg: "1.5rem" }}
+            >
+              Descrição:{" "}
+            </Text>
+            <Text mb={{ base: "1rem", md: "`1rem", lg: "1.5rem" }}>
               {textVisibility ? `${descriptionValue}` : `${todos.description}`}
             </Text>
 

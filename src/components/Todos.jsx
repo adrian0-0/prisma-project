@@ -7,11 +7,13 @@ import {
   Heading,
   Input,
   Divider,
+  Image,
 } from "@chakra-ui/react";
 import axios from "axios";
 import api from "./Api";
 import TaskModal from "./TaskModal";
 import CustomCheckBox from "./CustomCheckBox";
+import { motion } from "framer-motion";
 
 function Todos() {
   const [todos, setTodos] = useState([]);
@@ -46,7 +48,7 @@ function Todos() {
     getTodos();
   }
 
-  async function editTodo(todo) {
+  async function editTodo() {
     const response = await axios.put("http://localhost:3333/todos", {
       id: selectTodo.id,
       name: inputValue,
@@ -100,30 +102,58 @@ function Todos() {
             <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <TaskModal todos={todo} />
             </Box>
-            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+            <Box
+              w={"full"}
+              mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+              p={"5px"}
+              overflow={"hidden"}
+            >
               <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}
               />
             </Box>
-            <ButtonGroup>
-              <Button
-                colorScheme="teal"
-                onClick={() => {
-                  handleWithEditButton(todo);
-                }}
-              >
-                Editar
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={() => {
-                  deleteTodo(todo);
-                }}
-              >
-                Deletar
-              </Button>
-            </ButtonGroup>
+            <Box
+              mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+              as={motion.div}
+              whileTap={{ scale: 0.2 }}
+              transition={{ duration: 0.1 }}
+              style={{ display: "inline-block" }}
+              whileHover={{
+                rotate: 20,
+                scale: 1.3,
+                transition: { yoyo: Infinity, duration: 0.1 },
+              }}
+              onClick={() => {
+                handleWithEditButton(todo);
+              }}
+            >
+              <Image
+                src="assets/svg/pencil.svg"
+                alt="editar texto"
+                boxSize="30px"
+              />
+            </Box>
+            <Box
+              as={motion.div}
+              whileTap={{ scale: 0.2 }}
+              transition={{ duration: 0.1 }}
+              style={{ display: "inline-block" }}
+              whileHover={{
+                rotate: 20,
+                scale: 1.3,
+                transition: { yoyo: Infinity, duration: 0.1 },
+              }}
+              onClick={() => {
+                deleteTodo(todo);
+              }}
+            >
+              <Image
+                src="assets/svg/trashcan.svg"
+                alt="editar texto"
+                boxSize="30px"
+              />
+            </Box>
           </HStack>
         );
       })}
@@ -142,34 +172,63 @@ function Todos() {
               <HStack
                 mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
                 key={todo.id}
+                spacing={"0rem"}
               >
                 <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
                   <TaskModal todos={todo} />
                 </Box>
-                <Box w={"full"}>
+                <Box
+                  w={"full"}
+                  mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+                  overflow={"hidden"}
+                  p={"5px"}
+                >
                   <CustomCheckBox
                     todos={todo}
                     onClick={() => modifyStatusTodo(todo)}
                   />
                 </Box>
-                <ButtonGroup>
-                  <Button
-                    colorScheme="teal"
-                    onClick={() => {
-                      handleWithEditButton(todo);
-                    }}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    onClick={() => {
-                      deleteTodo(todo);
-                    }}
-                  >
-                    Deletar
-                  </Button>
-                </ButtonGroup>
+                <Box
+                  mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+                  as={motion.div}
+                  whileTap={{ scale: 0.2 }}
+                  transition={{ duration: 0.1 }}
+                  style={{ display: "inline-block" }}
+                  whileHover={{
+                    rotate: 20,
+                    scale: 1.3,
+                    transition: { yoyo: Infinity, duration: 0.1 },
+                  }}
+                  onClick={() => {
+                    handleWithEditButton(todo);
+                  }}
+                >
+                  <Image
+                    src="assets/svg/pencil.svg"
+                    alt="editar texto"
+                    boxSize="30px"
+                  />
+                </Box>
+                <Box
+                  as={motion.div}
+                  whileTap={{ scale: 0.2 }}
+                  transition={{ duration: 0.1 }}
+                  style={{ display: "inline-block" }}
+                  whileHover={{
+                    rotate: 20,
+                    scale: 1.3,
+                    transition: { yoyo: Infinity, duration: 0.1 },
+                  }}
+                  onClick={() => {
+                    deleteTodo(todo);
+                  }}
+                >
+                  <Image
+                    src="assets/svg/trashcan.svg"
+                    alt="editar texto"
+                    boxSize="30px"
+                  />
+                </Box>
               </HStack>
             );
           })}{" "}
