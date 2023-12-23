@@ -100,7 +100,12 @@ function Todos() {
             <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
               <TaskModal todos={todo} />
             </Box>
-            <Box w={"full"} mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
+            <Box
+              w={"full"}
+              mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+              p={"5px"}
+              overflow={"hidden"}
+            >
               <CustomCheckBox
                 todos={todo}
                 onClick={() => modifyStatusTodo(todo)}
@@ -142,11 +147,17 @@ function Todos() {
               <HStack
                 mb={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
                 key={todo.id}
+                spacing={"0rem"}
               >
                 <Box mr={{ base: "1rem", md: "1rem", lg: "2rem" }}>
                   <TaskModal todos={todo} />
                 </Box>
-                <Box w={"full"}>
+                <Box
+                  w={"full"}
+                  mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+                  overflow={"hidden"}
+                  p={"5px"}
+                >
                   <CustomCheckBox
                     todos={todo}
                     onClick={() => modifyStatusTodo(todo)}
