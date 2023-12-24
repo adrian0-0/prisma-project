@@ -14,31 +14,41 @@ import api from "./Api";
 import TaskModal from "./TaskModal";
 import CustomCheckBox from "./CustomCheckBox";
 import { motion } from "framer-motion";
+import { create, set } from "lodash";
 
 function Todos() {
   const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [inputVisibility, setInputVisibility] = useState(false);
+  const [createInputValue, setCreateInputValue] = useState("");
+  const [editInputValue, setEditInputValue] = useState("");
+  const [editInputVisibility, setEditInputVisibility] = useState(false);
+  const [createInputVisibility, setCreateInputVisibility] = useState(false);
   const [selectTodo, setSelectTodo] = useState();
   const tarefasParaFazer = todos.filter((todo) => todo.status === false);
   const tarefasConcluidas = todos.filter((todo) => todo.status === true);
+  const [buttonText, setButtonText] = useState(false);
+  const [editButtonVisibility, setEditButtonVisibility] = useState(false);
+  const [createButtonVisibility, setCreateButtonVisibility] = useState(true);
   const [todosLength, setTodosLength] = useState();
-  async function handleButton() {
-    setInputVisibility(!inputVisibility);
-  }
 
-  async function handleWithEditButton(todo) {
-    handleButton();
-    setSelectTodo(todo);
+  async function handleEdit(todos) {
+    setButtonText(true);
+    setEditInputVisibility(true);
+    setCreateInputVisibility(false);
+    setCreateButtonVisibility(false);
+    setSelectTodo(todos);
   }
 
   async function createTodo() {
-    const response = await axios.post("http://localhost:3333/todos", {
-      name: inputValue,
-    });
+    if (createInputValue != "") {
+      const response = await axios.post("http://localhost:3333/todos", {
+        name: createInputValue,
+      });
+    }
+    setButtonText(false);
+    setEditInputVisibility(false);
+    setCreateInputVisibility(false);
+    setCreateInputValue("");
     getTodos();
-    setInputVisibility(!inputVisibility);
-    setInputValue("");
   }
 
   async function deleteTodo(todo) {
@@ -49,12 +59,19 @@ function Todos() {
   }
 
   async function editTodo() {
-    const response = await axios.put("http://localhost:3333/todos", {
-      id: selectTodo.id,
-      name: inputValue,
-    });
-    setInputVisibility(false);
-    setInputValue("");
+    console.log(selectTodo);
+    if (editInputValue != "") {
+      const response = await axios.put("http://localhost:3333/todos", {
+        id: selectTodo.id,
+        name: editInputValue,
+      });
+    }
+    setEditInputVisibility(false);
+    setCreateInputVisibility(false);
+    setButtonText(false);
+    setCreateButtonVisibility(true);
+    setEditButtonVisibility(false);
+    setEditInputValue("");
     getTodos();
   }
 
@@ -91,7 +108,6 @@ function Todos() {
 
   return (
     <Box>
-      {/* {console.log(tarefasParaFazer)} */}
       {tarefasParaFazer.map((todo) => {
         return (
           <HStack
@@ -113,46 +129,49 @@ function Todos() {
                 onClick={() => modifyStatusTodo(todo)}
               />
             </Box>
-            <Box
-              mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
-              as={motion.div}
-              whileTap={{ scale: 0.2 }}
-              transition={{ duration: 0.1 }}
-              style={{ display: "inline-block" }}
-              whileHover={{
-                rotate: 20,
-                scale: 1.3,
-                transition: { yoyo: Infinity, duration: 0.1 },
-              }}
-              onClick={() => {
-                handleWithEditButton(todo);
-              }}
-            >
-              <Image
-                src="assets/svg/pencil.svg"
-                alt="editar texto"
-                boxSize="30px"
-              />
+
+            <Box onClick={() => handleEdit(todo)}>
+              <Box
+                mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+                as={motion.div}
+                whileTap={{ scale: 0.2 }}
+                transition={{ duration: 0.1 }}
+                style={{ display: "inline-block" }}
+                whileHover={{
+                  rotate: 20,
+                  scale: 1.3,
+                  transition: { yoyo: Infinity, duration: 0.1 },
+                }}
+              >
+                <Image
+                  src="assets/svg/pencil.svg"
+                  alt="editar texto"
+                  boxSize="40px"
+                />
+              </Box>
             </Box>
             <Box
-              as={motion.div}
-              whileTap={{ scale: 0.2 }}
-              transition={{ duration: 0.1 }}
-              style={{ display: "inline-block" }}
-              whileHover={{
-                rotate: 20,
-                scale: 1.3,
-                transition: { yoyo: Infinity, duration: 0.1 },
-              }}
               onClick={() => {
                 deleteTodo(todo);
               }}
             >
-              <Image
-                src="assets/svg/trashcan.svg"
-                alt="editar texto"
-                boxSize="30px"
-              />
+              <Box
+                as={motion.div}
+                whileTap={{ scale: 0.2 }}
+                transition={{ duration: 0.1 }}
+                style={{ display: "inline-block" }}
+                whileHover={{
+                  rotate: 20,
+                  scale: 1.3,
+                  transition: { yoyo: Infinity, duration: 0.1 },
+                }}
+              >
+                <Image
+                  src="assets/svg/trashcan.svg"
+                  alt="apagar tarefa"
+                  boxSize="30px"
+                />
+              </Box>
             </Box>
           </HStack>
         );
@@ -188,46 +207,48 @@ function Todos() {
                     onClick={() => modifyStatusTodo(todo)}
                   />
                 </Box>
-                <Box
-                  mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
-                  as={motion.div}
-                  whileTap={{ scale: 0.2 }}
-                  transition={{ duration: 0.1 }}
-                  style={{ display: "inline-block" }}
-                  whileHover={{
-                    rotate: 20,
-                    scale: 1.3,
-                    transition: { yoyo: Infinity, duration: 0.1 },
-                  }}
-                  onClick={() => {
-                    handleWithEditButton(todo);
-                  }}
-                >
-                  <Image
-                    src="assets/svg/pencil.svg"
-                    alt="editar texto"
-                    boxSize="30px"
-                  />
+                <Box onClick={() => handleEdit(todo)}>
+                  <Box
+                    mr={{ base: "1rem", md: "1rem", lg: "2rem" }}
+                    as={motion.div}
+                    whileTap={{ scale: 0.2 }}
+                    transition={{ duration: 0.1 }}
+                    style={{ display: "inline-block" }}
+                    whileHover={{
+                      rotate: 20,
+                      scale: 1.3,
+                      transition: { yoyo: Infinity, duration: 0.1 },
+                    }}
+                  >
+                    <Image
+                      src="assets/svg/pencil.svg"
+                      alt="editar texto"
+                      boxSize="40px"
+                    />
+                  </Box>
                 </Box>
                 <Box
-                  as={motion.div}
-                  whileTap={{ scale: 0.2 }}
-                  transition={{ duration: 0.1 }}
-                  style={{ display: "inline-block" }}
-                  whileHover={{
-                    rotate: 20,
-                    scale: 1.3,
-                    transition: { yoyo: Infinity, duration: 0.1 },
-                  }}
                   onClick={() => {
                     deleteTodo(todo);
                   }}
                 >
-                  <Image
-                    src="assets/svg/trashcan.svg"
-                    alt="editar texto"
-                    boxSize="30px"
-                  />
+                  <Box
+                    as={motion.div}
+                    whileTap={{ scale: 0.2 }}
+                    transition={{ duration: 0.1 }}
+                    style={{ display: "inline-block" }}
+                    whileHover={{
+                      rotate: 20,
+                      scale: 1.3,
+                      transition: { yoyo: Infinity, duration: 0.1 },
+                    }}
+                  >
+                    <Image
+                      src="assets/svg/trashcan.svg"
+                      alt="apagar tarefa"
+                      boxSize="30px"
+                    />
+                  </Box>
                 </Box>
               </HStack>
             );
@@ -236,26 +257,46 @@ function Todos() {
       )}
 
       <Input
-        value={inputValue}
-        display={inputVisibility ? "block" : "none"}
+        value={createInputValue}
+        display={createInputVisibility ? "block" : "none"}
         onChange={(e) => {
-          setInputValue(e.target.value);
+          setCreateInputValue(e.target.value);
+          setButtonText(true);
+        }}
+      ></Input>
+      <Input
+        value={editInputValue}
+        display={editInputVisibility ? "block" : "none"}
+        onChange={(e) => {
+          setEditInputValue(e.target.value);
+          setEditInputVisibility(true);
+          setEditButtonVisibility(true);
         }}
       ></Input>
       <Button
         width={"100%"}
+        display={editButtonVisibility ? "block" : "none"}
         mt={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
         colorScheme="teal"
         variant={"outline"}
         onClick={() => {
-          inputVisibility
-            ? selectTodo
-              ? editTodo()
-              : createTodo()
-            : handleButton();
+          editInputVisibility ? editTodo() : null;
         }}
       >
-        {inputVisibility ? "Enviar" : "Nova tarefa"}
+        Enviar edição
+      </Button>
+      <Button
+        width={"100%"}
+        display={createButtonVisibility ? "block" : "none"}
+        mt={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
+        colorScheme="teal"
+        variant={"outline"}
+        onClick={() => {
+          setCreateInputVisibility(true);
+          createInputVisibility ? createTodo() : null;
+        }}
+      >
+        {buttonText ? "Enviar tarefa" : "Nova tarefa"}
       </Button>
     </Box>
   );
