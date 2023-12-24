@@ -26,30 +26,16 @@ function Todos() {
   const tarefasParaFazer = todos.filter((todo) => todo.status === false);
   const tarefasConcluidas = todos.filter((todo) => todo.status === true);
   const [buttonText, setButtonText] = useState(false);
+  const [editButtonVisibility, setEditButtonVisibility] = useState(false);
+  const [createButtonVisibility, setCreateButtonVisibility] = useState(true);
   const [todosLength, setTodosLength] = useState();
 
   async function handleEdit(todos) {
     setButtonText(true);
     setEditInputVisibility(true);
+    setCreateInputVisibility(false);
+    setCreateButtonVisibility(false);
     setSelectTodo(todos);
-  }
-
-  async function handleButton() {
-    setButtonText(true);
-
-    if (createInputValue != "") {
-      createTodo();
-    }
-    if (editInputValue != "") {
-      editTodo();
-    }
-  }
-
-  async function handleCreate() {
-    setButtonText(true);
-    setCreateInputVisibility(true);
-    if (createInputVisibility === true && editInputVisibility === false) {
-    }
   }
 
   async function createTodo() {
@@ -60,6 +46,7 @@ function Todos() {
     }
     setButtonText(false);
     setEditInputVisibility(false);
+    setCreateInputVisibility(false);
     setCreateInputValue("");
     getTodos();
   }
@@ -82,6 +69,8 @@ function Todos() {
     setEditInputVisibility(false);
     setCreateInputVisibility(false);
     setButtonText(false);
+    setCreateButtonVisibility(true);
+    setEditButtonVisibility(false);
     setEditInputValue("");
     getTodos();
   }
@@ -119,7 +108,6 @@ function Todos() {
 
   return (
     <Box>
-      {/* {console.log(tarefasParaFazer)} */}
       {tarefasParaFazer.map((todo) => {
         return (
           <HStack
@@ -273,7 +261,7 @@ function Todos() {
         display={createInputVisibility ? "block" : "none"}
         onChange={(e) => {
           setCreateInputValue(e.target.value);
-          setCreateInputVisibility(true);
+          setButtonText(true);
         }}
       ></Input>
       <Input
@@ -282,23 +270,33 @@ function Todos() {
         onChange={(e) => {
           setEditInputValue(e.target.value);
           setEditInputVisibility(true);
+          setEditButtonVisibility(true);
         }}
       ></Input>
       <Button
         width={"100%"}
+        display={editButtonVisibility ? "block" : "none"}
         mt={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
         colorScheme="teal"
         variant={"outline"}
         onClick={() => {
-          // inputVisibility
-          //   ? selectTodo
-          //     ? editTodo()
-          //     : createTodo()
-          //   : handleButton();
-          handleButton();
+          editInputVisibility ? editTodo() : null;
         }}
       >
-        {buttonText ? "Enviar" : "Nova tarefa"}
+        Enviar edição
+      </Button>
+      <Button
+        width={"100%"}
+        display={createButtonVisibility ? "block" : "none"}
+        mt={{ base: "1.5rem", md: "2rem", lg: "3rem" }}
+        colorScheme="teal"
+        variant={"outline"}
+        onClick={() => {
+          setCreateInputVisibility(true);
+          createInputVisibility ? createTodo() : null;
+        }}
+      >
+        {buttonText ? "Enviar tarefa" : "Nova tarefa"}
       </Button>
     </Box>
   );
